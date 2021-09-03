@@ -34,7 +34,7 @@
 # Todo
 # Test build for Windows, Mac and mingw.
 
-project(godot-cpp)
+project(godot-cpp LANGUAGES CXX)
 cmake_minimum_required(VERSION 3.6)
 
 option(GENERATE_TEMPLATE_GET_NODE "Generate a template version of the Node class's get_node." ON)
@@ -130,7 +130,6 @@ else()
 	set(GENERATE_BINDING_PARAMETERS "False")
 endif()
 
-message(STATUS "Generating Bindings")
 execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import binding_generator; binding_generator.print_file_list(\"${GODOT_CUSTOM_API_FILE}\", \"${CMAKE_CURRENT_BINARY_DIR}\", headers=True, sources=True)"
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 	OUTPUT_VARIABLE GENERATED_FILES_LIST
@@ -142,7 +141,7 @@ add_custom_command(OUTPUT ${GENERATED_FILES_LIST}
 		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 		MAIN_DEPENDENCY ${GODOT_CUSTOM_API_FILE}
 		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/binding_generator.py
-		COMMENT Generating Bindings
+		COMMENT "Generating bindings"
 )
 
 # Get Sources
@@ -155,6 +154,7 @@ add_library(${PROJECT_NAME}
 		${HEADERS}
 		${GENERATED_FILES_LIST}
 )
+add_library(godot::cpp ALIAS ${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
 	include
