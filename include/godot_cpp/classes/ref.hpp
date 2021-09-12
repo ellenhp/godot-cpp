@@ -164,7 +164,8 @@ public:
 		}
 	}
 
-	Ref(const Ref &p_from) {
+	template <class T_Other>
+	Ref(const Ref<T_Other> &p_from) {
 		ref(p_from);
 	}
 
